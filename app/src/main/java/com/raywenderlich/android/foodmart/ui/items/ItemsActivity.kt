@@ -31,13 +31,16 @@
 
 package com.raywenderlich.android.foodmart.ui.items
 
+import android.media.Image
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import com.raywenderlich.android.foodmart.R
 import com.raywenderlich.android.foodmart.model.Food
@@ -58,6 +61,11 @@ class ItemsActivity : AppCompatActivity(), ItemsContract.View, ItemsAdapter.Item
 
   private var itemCount: TextView? = null
   private var itemCountCircle: FrameLayout? = null
+
+
+  companion object{
+    const val DURATION = 500L
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -134,8 +142,21 @@ class ItemsActivity : AppCompatActivity(), ItemsContract.View, ItemsAdapter.Item
     presenter.removeItem(item)
   }
 
-  override fun addItem(item: Food) {
+  override fun addItem(item: Food, foodImageView: ImageView, cartButton: ImageView) {
+    val foodImagePosition = getPosition(foodImageView)
+    val itemCountCirclePosition = getPosition(itemCountCircle)
+
+    val foodImageSize = resources.getDimension(R.dimen.list_item_height).toInt()
+    
+
+
     presenter.addItem(item)
+  }
+
+  private fun getPosition(view:View?):IntArray{
+    val positon = intArrayOf(0,0)
+    view?.getLocationOnScreen(positon)
+
   }
 
   @Suppress("UNUSED_PARAMETER")

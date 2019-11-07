@@ -31,12 +31,16 @@
 
 package com.raywenderlich.android.foodmart.ui.cart
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.BounceInterpolator
+import android.view.animation.OvershootInterpolator
 import com.raywenderlich.android.foodmart.R
 import com.raywenderlich.android.foodmart.model.Food
 import com.raywenderlich.android.foodmart.model.events.CartDeleteItemEvent
@@ -103,14 +107,13 @@ class CartActivity : AppCompatActivity(), CartContract.View, CartAdapter.CartAda
 
   @Suppress("UNUSED_PARAMETER")
   fun showPaymentMethods(view: View) {
-    checkoutButton.visibility = View.INVISIBLE
-    paymentMethodContainer.visibility = View.VISIBLE
+    animateShowPaymentContainer()
   }
 
   @Suppress("UNUSED_PARAMETER")
   fun closePaymentMethods(view: View) {
-    checkoutButton.visibility = View.VISIBLE
-    paymentMethodContainer.visibility = View.INVISIBLE
+
+    animateHidePaymentContainer()
   }
 
   @Suppress("UNUSED_PARAMETER")
@@ -122,5 +125,31 @@ class CartActivity : AppCompatActivity(), CartContract.View, CartAdapter.CartAda
   fun onCartDeleteItemEvent(event: CartDeleteItemEvent) {
     adapter.notifyItemRemoved(event.position)
     presenter.loadCart(false)
+  }
+
+  fun animateShowPaymentContainer(){
+    paymentMethodContainer.visibility = View.VISIBLE
+    animatePaymentMethodContainer(paymentMethodContainer.height.toFloat(),0f)
+  }
+
+  fun animateHidePaymentContainer(){
+    //paymentMethodContainer.visibility = View.INVISIBLE
+    animatePaymentMethodContainer(0f,paymentMethodContainer.height.toFloat())
+  }
+
+  fun animatePaymentMethodContainer(startValue:Float, endValue:Float){
+
+    val animator = ObjectAnimator.ofFloat(paymentMethodContainer,"translationY", startValue,endValue)
+    animator.interpolator = AccelerateDecelerateInterpolator()
+    animator.duration = 500
+    animator.start()
+//    val animator = ValueAnimator.ofFloat(paymentMethodContainer.height.toFloat(),0f)
+//    animator.duration = 500
+//    animator.start()
+//
+//    animator.addUpdateListener { updateAnim ->
+//      val animatedValue = updateAnim.animatedValue as Float
+//      paymentMethodContainer.translationY = animatedValue
+//    }
   }
 }
