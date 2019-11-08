@@ -83,13 +83,13 @@ class ItemsAdapter(private val items: MutableList<Food>, private val listener: I
     }
 
     override fun onClick(view: View) {
-      val context = view.context
-      context.startActivity(FoodActivity.newIntent(context, item.id))
+      listener.showFoodDetail(view,item)
     }
   }
 
   interface ItemsAdapterListener {
     fun removeItem(item: Food)
     fun addItem(item: Food, foodImageView:ImageView, cartButton:ImageView)
+    fun showFoodDetail(view:View, food:Food)
   }
 }

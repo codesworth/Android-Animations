@@ -34,13 +34,18 @@ package com.raywenderlich.android.foodmart.ui.detail
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.opengl.Visibility
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import com.raywenderlich.android.foodmart.R
 import com.raywenderlich.android.foodmart.app.toast
 import com.raywenderlich.android.foodmart.model.events.CartEvent
 import com.raywenderlich.android.foodmart.ui.Injection
+import com.raywenderlich.android.foodmart.ui.items.ItemsContract
 import kotlinx.android.synthetic.main.activity_food.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -89,7 +94,30 @@ class FoodActivity : AppCompatActivity(), FoodContract.View {
           presenter.addItem(food)
         }
       }
+      foodImage.setOnClickListener{
+        val rotateAnimation = AnimationUtils.loadAnimation(this,R.anim.rotate)
+        rotateAnimation.setAnimationListener(object: Animation.AnimationListener{
+          override fun onAnimationRepeat(animation: Animation?) {
+
+          }
+
+          override fun onAnimationEnd(animation: Animation?) {
+            monster.visibility = View.INVISIBLE
+          }
+
+          override fun onAnimationStart(animation: Animation?) {
+            monster.visibility = View.VISIBLE
+          }
+
+        })
+        foodImage.startAnimation(rotateAnimation)
+      }
     }
+  }
+
+  override fun onBackPressed() {
+    super.onBackPressed()
+    fab.visibility = View.GONE
   }
 
   override fun onResume() {
