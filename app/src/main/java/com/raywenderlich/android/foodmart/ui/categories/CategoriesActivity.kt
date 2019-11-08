@@ -75,5 +75,7 @@ class CategoriesActivity : AppCompatActivity(), CategoriesContract.View {
 
       override fun getPageTitle(position: Int) = categories[position]
     }
+
+    viewPager.setPageTransformer(true,DepthPageTransformer())
   }
 }

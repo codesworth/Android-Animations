@@ -31,6 +31,8 @@
 
 package com.raywenderlich.android.foodmart.ui.cart
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
@@ -38,7 +40,9 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import android.view.ViewAnimationUtils
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AnimationUtils
 import android.view.animation.BounceInterpolator
 import android.view.animation.OvershootInterpolator
 import com.raywenderlich.android.foodmart.R
@@ -128,13 +132,26 @@ class CartActivity : AppCompatActivity(), CartContract.View, CartAdapter.CartAda
   }
 
   fun animateShowPaymentContainer(){
+//    paymentMethodContainer.visibility = View.VISIBLE
+//    animatePaymentMethodContainer(paymentMethodContainer.height.toFloat(),0f)
+    val clipInfo = PaymentMethodClipInfo()
+    val anim = ViewAnimationUtils.createCircularReveal(paymentMethodContainer,clipInfo.x,clipInfo.y,0f, clipInfo.radius)
     paymentMethodContainer.visibility = View.VISIBLE
-    animatePaymentMethodContainer(paymentMethodContainer.height.toFloat(),0f)
+    anim.start()
   }
 
   fun animateHidePaymentContainer(){
     //paymentMethodContainer.visibility = View.INVISIBLE
-    animatePaymentMethodContainer(0f,paymentMethodContainer.height.toFloat())
+    //animatePaymentMethodContainer(0f,paymentMethodContainer.height.toFloat())
+    val clipInfo = PaymentMethodClipInfo()
+    val anim = ViewAnimationUtils.createCircularReveal(paymentMethodContainer,clipInfo.x,clipInfo.y, clipInfo.radius, 0f)
+    anim.addListener(object: AnimatorListenerAdapter(){
+      override fun onAnimationEnd(animation: Animator?) {
+        paymentMethodContainer.visibility = View.INVISIBLE
+
+      }
+    })
+    anim.start()
   }
 
   fun animatePaymentMethodContainer(startValue:Float, endValue:Float){
@@ -151,5 +168,12 @@ class CartActivity : AppCompatActivity(), CartContract.View, CartAdapter.CartAda
 //      val animatedValue = updateAnim.animatedValue as Float
 //      paymentMethodContainer.translationY = animatedValue
 //    }
+  }
+
+
+  private inner class PaymentMethodClipInfo{
+    val x = paymentMethodContainer.width / 2
+    val y = paymentMethodContainer.height - checkoutButton.height
+    val radius = Math.hypot(x.toDouble(),y.toDouble()).toFloat()
   }
 }
