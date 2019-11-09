@@ -32,6 +32,7 @@
 package com.raywenderlich.android.foodmart.ui.items
 
 import android.animation.*
+import android.graphics.drawable.Animatable
 import android.media.Image
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -54,6 +55,7 @@ import com.raywenderlich.android.foodmart.ui.cart.CartActivity
 import com.raywenderlich.android.foodmart.ui.categories.CategoriesActivity
 import com.raywenderlich.android.foodmart.ui.detail.FoodActivity
 import kotlinx.android.synthetic.main.activity_items.*
+import kotlinx.android.synthetic.main.list_item_food.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -143,10 +145,16 @@ class ItemsActivity : AppCompatActivity(), ItemsContract.View, ItemsAdapter.Item
         adapter.updateItems(items)
     }
 
-    override fun removeItem(item: Food) {
-
+    override fun removeItem(item: Food, cartButton: ImageView) {
+        animateCartButton(cartButton,false)
+        cartIconAnimatorSet().apply { addListener( object : AnimatorListenerAdapter(){
+            override fun onAnimationEnd(animation: Animator?) {
+                presenter.removeItem(item)
+            }
+        }) }
         presenter.removeItem(item)
         cartIconAnimatorSet().start()
+
     }
 
     override fun showFoodDetail(view: View, food: Food) {
@@ -190,6 +198,8 @@ class ItemsActivity : AppCompatActivity(), ItemsContract.View, ItemsAdapter.Item
             start()
         }
 
+        animateCartButton(cartButton, true)
+
 
     }
 
@@ -198,6 +208,12 @@ class ItemsActivity : AppCompatActivity(), ItemsContract.View, ItemsAdapter.Item
         animator.duration = DURATION
         animator.interpolator = AccelerateDecelerateInterpolator()
         return animator
+    }
+
+    private fun animateCartButton(cartButton: ImageView, morphToDone:Boolean){
+        cartButton.setImageResource(if (morphToDone) R.drawable.ic_morph else R.drawable.ic_morph_reverse)
+        val animatable = cartButton.drawable as Animatable
+        animatable.start()
     }
 
 
@@ -244,6 +260,14 @@ class ItemsActivity : AppCompatActivity(), ItemsContract.View, ItemsAdapter.Item
         adapter.notifyDataSetChanged()
     }
 
+
+    override fun addFavorite(food: Food) {
+        presenter.addFavorite(food)
+    }
+
+    override fun removeFavorite(food: Food) {
+        presenter.removeFavorite(food)
+    }
 
 }
 

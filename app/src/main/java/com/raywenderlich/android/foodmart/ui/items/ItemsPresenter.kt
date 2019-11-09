@@ -32,11 +32,12 @@
 package com.raywenderlich.android.foodmart.ui.items
 
 import com.raywenderlich.android.foodmart.model.Cart
+import com.raywenderlich.android.foodmart.model.Favorites
 import com.raywenderlich.android.foodmart.model.Food
 import com.raywenderlich.android.foodmart.model.FoodRepository
 
 
-class ItemsPresenter(private val repository: FoodRepository, private val cart: Cart, private val itemsView: ItemsContract.View)
+class ItemsPresenter(private val repository: FoodRepository, private val cart: Cart,private val favorite:Favorites, private val itemsView: ItemsContract.View)
   : ItemsContract.Presenter {
 
   override fun start() {
@@ -63,5 +64,13 @@ class ItemsPresenter(private val repository: FoodRepository, private val cart: C
 
   override fun addItem(item: Food) {
     cart.addItem(item)
+  }
+
+  override fun removeFavorite(food: Food) {
+    favorite.removeFavorite(food)
+  }
+
+  override fun addFavorite(food: Food) {
+    favorite.addFavorite(food)
   }
 }

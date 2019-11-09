@@ -32,6 +32,7 @@
 package com.raywenderlich.android.foodmart.ui
 
 import com.raywenderlich.android.foodmart.model.Cart
+import com.raywenderlich.android.foodmart.model.Favorites
 import com.raywenderlich.android.foodmart.model.FoodRepository
 import com.raywenderlich.android.foodmart.ui.cart.CartContract
 import com.raywenderlich.android.foodmart.ui.cart.CartPresenter
@@ -51,8 +52,10 @@ object Injection {
 
   fun provideCart(): Cart = Cart
 
+  fun provideFavorites(): Favorites = Favorites
+
   fun provideItemsPresenter(itemsView: ItemsContract.View): ItemsContract.Presenter =
-      ItemsPresenter(provideFoodRepository(), provideCart(), itemsView)
+      ItemsPresenter(provideFoodRepository(), provideCart(), provideFavorites(), itemsView)
 
   fun provideFoodPresenter(foodView: FoodContract.View): FoodContract.Presenter =
       FoodPresenter(provideFoodRepository(), provideCart(), foodView)

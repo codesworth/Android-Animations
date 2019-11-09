@@ -35,6 +35,17 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Food Name" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/faveButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cartButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="false"
+        app:lottie_fileName="favorite_app_icon.json"
+        app:lottie_loop="false"/>
+
     <ImageView
         android:id="@+id/cartButton"
         android:layout_width="@dimen/add_button_size"

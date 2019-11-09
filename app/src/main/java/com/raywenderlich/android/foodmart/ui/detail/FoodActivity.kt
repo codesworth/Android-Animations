@@ -33,6 +33,7 @@ package com.raywenderlich.android.foodmart.ui.detail
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Animatable
 import android.net.Uri
 import android.opengl.Visibility
 import android.os.Bundle
@@ -135,7 +136,9 @@ class FoodActivity : AppCompatActivity(), FoodContract.View {
   fun onCartEvent(event: CartEvent) {
     val food = presenter.getFood(intent.extras.getInt(EXTRA_FOOD_ID))
     val isInCart = food?.isInCart ?: false
-    fab.setImageResource(if (isInCart) R.drawable.ic_done else R.drawable.ic_add)
+    fab.setImageResource(if (isInCart) R.drawable.ic_morph else R.drawable.ic_morph_reverse)
+    val animatable = fab.drawable as Animatable
+    animatable.start()
     toast(if (isInCart) getString(R.string.added_to_cart) else getString(R.string.removed_from_cart))
   }
 }
